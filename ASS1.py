@@ -52,7 +52,7 @@ plt.title("Sigmoid Function")
 plt.xlabel("Input") 
 plt.ylabel("Output") 
 plt.grid(True) 
-plt.show() 
+plt.show()
  
 # 2. Tanh 
 plt.figure() 
@@ -61,7 +61,7 @@ plt.title("Tanh Function")
 plt.xlabel("Input") 
 plt.ylabel("Output") 
 plt.grid(True) 
-plt.show() 
+plt.show()
  
 # 3. ReLU 
 plt.figure() 

@@ -1,0 +1,1 @@
+loss = np.mean(np.square(error))

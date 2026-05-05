@@ -1,67 +1,48 @@
-import numpy as np 
-import matplotlib.pyplot as plt 
- 
-x = np.array([[0,0], 
-              [0,1], 
-              [1,0], 
-              [1,1]]) 
- 
-y = np.array([-1,-1,-1,1]) 
- 
-w1 = 0 
-w2 = 0 
-b = 0 
-alpha = 1 
- 
-for epochs in range(10): 
-    for i in range(len(x)): 
- 
-        yin = w1*x[i][0] + w2*x[i][1] + b 
- 
-        if yin >= 0: 
-                 y_pred = 1 
-        else: 
-            y_pred = -1 
- 
-        if y_pred != y[i]: 
-            w1 += alpha * y[i] * x[i][0] 
-            w2 += alpha * y[i] * x[i][1] 
-            b += alpha * y[i] 
- 
-print("Final Weights:", w1, w2) 
-print("Final Bias:", b) 
- 
-for i in range(len(x)): 
-    yin = w1*x[i][0] + w2*x[i][1] + b 
-    if yin >= 0: 
-        y_pred = 1 
-    else: 
-        y_pred = -1 
-    print(x[i], "->", y_pred) 
- 
-## graphical representation 
-plt.figure() 
- 
-for i in range(len(x)): 
-    if y[i] == 1: 
-        plt.scatter(x[i][0], x[i][1], color='blue') 
-    else: 
-        plt.scatter(x[i][0], x[i][1], color='red') 
- 
-if w2 != 0: 
-    x1_1 = -0.5 
-    x2_1 = -(w1*x1_1 + b)/w2
-    x1_2 = 1.5 
-    x2_2 = -(w1*x1_2 + b)/w2 
- 
-    plt.plot([x1_1, x1_2], [x2_1, x2_2]) 
-else: 
-    plt.axvline(x=-b/w1) 
- 
-plt.xlim(-0.5, 1.5) 
-plt.ylim(-0.5, 1.5) 
-plt.xlabel("x1") 
-plt.ylabel("x2") 
-plt.title("Perceptron AND Gate") 
-plt.grid() 
+import numpy as np
+import matplotlib.pyplot as plt
+
+# AND gate dataset
+X = np.array([[0,0],[0,1],[1,0],[1,1]])
+y = np.array([0,0,0,1])
+
+# Initialize
+w = np.zeros(2)
+b = 0
+lr = 0.1
+
+def step(x):
+    return 1 if x >= 0 else 0
+
+# Training
+for epoch in range(10):
+    for i in range(len(X)):
+        net = np.dot(w, X[i]) + b
+        pred = step(net)
+        error = y[i] - pred
+        
+        # update rule
+        w += lr * error * X[i]
+        b += lr * error
+
+print("Weights:", w)
+print("Bias:", b)
+
+# Plot decision boundary
+x_vals = np.linspace(-0.5, 1.5, 100)
+y_vals = -(w[0]*x_vals + b) / w[1]
+
+plt.plot(x_vals, y_vals, label="Decision Boundary")
+
+# Plot points
+for i in range(len(X)):
+    if y[i] == 0:
+        plt.scatter(X[i][0], X[i][1], marker='o', label="Class 0" if i==0 else "")
+    else:
+        plt.scatter(X[i][0], X[i][1], marker='x', label="Class 1")
+
+plt.xlabel("x1")
+plt.ylabel("x2")
+plt.title("Perceptron Decision Region (AND Gate)")
+plt.legend()
+plt.grid()
 plt.show()

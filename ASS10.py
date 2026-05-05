@@ -17,7 +17,8 @@ n = patterns.shape[1]
 W = np.zeros((n, n)) 
  
 for p in patterns: 
-    W += np.outer(p, p) 
+    W += np.outer(p, p)
+    print("outer res: \n", np.outer(p, p)) 
  
 # Remove self-connections 
 np.fill_diagonal(W, 0) 

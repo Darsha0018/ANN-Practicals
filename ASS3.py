@@ -1,41 +1,38 @@
-import numpy as np 
-# ASCII values for '0' to '9' 
-ascii_values = list(range(48, 58)) 
- 
-# Convert ASCII values to 6-bit binary 
-inputs = [list(map(int, format(a, '06b'))) for a in ascii_values] 
- 
-# Target: Even = 1, Odd = 0 
-targets = [1 if (a % 2 == 0) else 0 for a in ascii_values] 
- 
-# Initialize weights and bias 
-weights = np.zeros(6) 
-bias = 0 
-learning_rate = 0.1 
- 
-# Step activation function 
-def step(x): 
-    return 1 if x >= 0 else 0 
- 
-# Training 
-for epoch in range(25): 
-    for x, target in zip(inputs, targets): 
-        net_input = np.dot(weights, x) + bias 
-        output = step(net_input) 
-        error = target - output 
- 
-        weights += learning_rate * error * np.array(x) 
-        bias += learning_rate * error 
- 
-print("Training Completed") 
-print("Final Weights:", weights) 
-print("Final Bias:", bias) 
- 
-# Testing 
-print("\nASCII | Digit | Prediction (1=Even, 0=Odd)") 
-print("-------------------------------------------") 
- 
-for a in ascii_values: 
-    x = list(map(int, format(a, '06b'))) 
-    prediction = step(np.dot(weights, x) + bias) 
-    print(" ", a, " | ", chr(a), " | ", prediction)
+import numpy as np
+
+# Convert number (0–9) to 8-bit ASCII binary
+def to_ascii_binary(n):
+    ascii_val = ord(str(n))
+    return np.array([int(x) for x in format(ascii_val, '08b')])
+
+# Training data
+X = np.array([to_ascii_binary(i) for i in range(10)])
+y = np.array([1 if i % 2 == 0 else 0 for i in range(10)])  # 1=Even, 0=Odd
+
+# Initialize weights and bias
+w = np.zeros(8)
+b = 0
+lr = 0.1
+
+# Step activation function
+def step(x):
+    return 1 if x >= 0 else 0
+
+# Training
+for epoch in range(20):
+    for i in range(len(X)):
+        net = np.dot(w, X[i]) + b
+        pred = step(net)
+        error = y[i] - pred
+        
+        # Update rule
+        w += lr * error * X[i]
+        b += lr * error
+
+# Testing
+print("Number | Prediction")
+for i in range(10):
+    x = to_ascii_binary(i)
+    net = np.dot(w, x) + b
+    pred = step(net)
+    print(i, "     |", "Even" if pred == 1 else "Odd")
